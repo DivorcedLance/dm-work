@@ -38,3 +38,8 @@ pip install -r requirements.txt
 python predict_and_load_data.py
 
 # Abrir el dashboard en Power BI Desktop
+
+# Relaciones
+
+![Relacions 01](image.png)
+![Relacions 02](image-1.png)
