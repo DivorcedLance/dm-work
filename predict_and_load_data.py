@@ -158,7 +158,7 @@ def predict_and_export_all_models_fullrange(
     conn_str, 
     models_folder="models_to_use"
 ):
-    from prophet import Prophet  # Asegúrate de tenerlo instalado
+    from prophet import Prophet
     engine = create_engine(conn_str)
 
     for path_model in glob.glob(f"{models_folder}/*.joblib"):
@@ -177,19 +177,24 @@ def predict_and_export_all_models_fullrange(
         df_full_features = feature_engineering_from_range(full_range[0], full_range[-1])
         df_full_features = df_full_features.loc[full_range]
 
-        # AUTODETECCIÓN DEL MODELO PROPHET
-        is_prophet = (
-            model_name.lower().startswith("prophet")
-            or "prophet" in type(modelo).__name__.lower()
-        )
-
-        if is_prophet:
-            # Prophet requiere DataFrame especial con 'ds' y exógenas
+        # ==== DETECCIÓN AUTOMÁTICA DE MODELO Y PREDICCIÓN ====
+        if "prophet" in type(modelo).__name__.lower():
+            # Prophet puro
             prophet_future = df_full_features.copy().reset_index().rename(columns={'index': 'ds'})
-            # Si tu index ya tiene nombre 'datetime', puede requerir .rename(columns={'datetime': 'ds'})
             prophet_future['ds'] = pd.to_datetime(prophet_future['ds'])
+
+            # Extrae de los metadatos los regresores usados (si existen), para filtrar
+            regressors = metadata.get("best_params", {}).get("regressor_names", None)
+            if regressors is None:
+                # Intenta detectar de las columnas presentes en el modelo Prophet
+                regressors = [k for k in getattr(modelo, 'extra_regressors', {}).keys()]
+            if regressors:
+                cols_needed = ['ds'] + list(regressors)
+                # Deja solo las columnas necesarias
+                prophet_future = prophet_future[cols_needed]
+
             # Chequeo por NaN en exógenas usadas
-            regressor_cols = [col for col in prophet_future.columns if col not in ['ds']]
+            regressor_cols = [col for col in prophet_future.columns if col != 'ds']
             if prophet_future[regressor_cols].isnull().any().any():
                 print(f"❗ Hay NaNs en las variables exógenas para el modelo {model_name}.")
                 print(prophet_future[regressor_cols].isnull().sum())
@@ -205,12 +210,18 @@ def predict_and_export_all_models_fullrange(
                 "crime_count_predicted": yhat_full['yhat'],
                 "model_name": model_name,
             }).set_index("datetime")
+
         else:
-            # skforecast/autoregresivo clásico
+            # Modelos skforecast/autoregresivos/clásicos
+            # Si tiene .current_exog_names úsalo, sino infiere
             if hasattr(modelo, "current_exog_names"):
                 exog_features = modelo.current_exog_names
             else:
-                exog_features = [col for col in df_full_features.columns if col != 'crime_count']
+                # Si en los metadatos guardaste exógenas, úsalo (más seguro)
+                exog_features = metadata.get("best_params", {}).get("exog_vars", None)
+                if not exog_features:
+                    exog_features = [col for col in df_full_features.columns if col != 'crime_count']
+            # Garantiza que todas las features estén presentes
             for col in exog_features:
                 if col not in df_full_features.columns:
                     df_full_features[col] = 0
@@ -222,6 +233,7 @@ def predict_and_export_all_models_fullrange(
                 print(df_full_features.isnull().sum())
                 raise ValueError("Variables exógenas contienen NaN.")
 
+            # Predicción modelo autoregresivo
             y_pred_full = modelo.predict(steps=len(df_full_features), exog=df_full_features)
             df_pred_full = pd.DataFrame({
                 "datetime": df_full_features.index,
