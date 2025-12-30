@@ -1,123 +1,102 @@
-# 🚍 TransportData: Pipeline de Predicción y Análisis de Transporte Urbano
+# 🚍 TransportAnalytics: Pipeline ETL y Predicción de Demanda en Power BI
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
-[![ETL](https://img.shields.io/badge/Pipeline-ETL-green)]()
-[![Machine Learning](https://img.shields.io/badge/ML-Scikit--Learn-orange)]()
-[![React](https://img.shields.io/badge/Frontend-React-61DAFB)](https://reactjs.org/)
-[![Docker](https://img.shields.io/badge/Deploy-Docker-2496ED)](https://www.docker.com/)
+[![Power BI](https://img.shields.io/badge/Business_Intelligence-Power_BI-F2C811?logo=powerbi)](https://powerbi.microsoft.com/)
+[![Python](https://img.shields.io/badge/Data_Engineering-Python_3.9-3776AB?logo=python)](https://www.python.org/)
+[![SQL](https://img.shields.io/badge/Database-SQL-4479A1)]()
+[![Machine Learning](https://img.shields.io/badge/Analytics-Scikit--Learn-orange)]()
 
-> **Sistema integral de Inteligencia de Negocios y Data Engineering para la gestión, validación y predicción de demanda en transporte universitario.**
-
----
-
-## 📋 Descripción del Proyecto
-
-**TransportData** es una solución _end-to-end_ diseñada para modernizar la gestión logística del transporte. El proyecto no solo administra la operación diaria (validación de usuarios vía QR), sino que implementa un **Pipeline ETL (Extract, Transform, Load)** robusto que alimenta modelos de Machine Learning para predecir la demanda futura y optimizar la asignación de flotas.
-
-Este repositorio demuestra la integración de ingeniería de software con ciencia de datos, enfocándose en la **toma de decisiones basada en datos**.
-
-### 📸 Vista General del Dashboard
-![Dashboard Corporativo](screenshots/image.png)
-*Panel administrativo centralizado con KPIs en tiempo real.*
+> **Solución de Inteligencia de Negocios (BI) que integra scripts de Python para ETL y Machine Learning, alimentando un sistema de reportes centralizado en Power BI.**
 
 ---
 
-## 🏗️ Arquitectura de Datos & Pipeline ETL
+## 📋 Resumen del Proyecto
 
-El núcleo del proyecto se basa en una arquitectura modular documentada en nuestra wiki interna:
+Este proyecto implementa una arquitectura de datos moderna para optimizar la gestión de transporte universitario. A diferencia de los reportes estáticos tradicionales, **TransportAnalytics** utiliza un script de Python automatizado que actúa como motor de cálculo: extrae datos operativos, ejecuta modelos predictivos de demanda y escribe los resultados en una base de datos. Finalmente, **Power BI** se conecta a esta fuente para visualizar métricas históricas y predicciones futuras.
 
-1.  **Ingesta de Datos (Data Ingestion):** Captura de datos transaccionales en tiempo real (validaciones QR, registros de usuarios).
-2.  **Infraestructura de Base de Datos:**
-    * Modelado relacional optimizado para consultas analíticas.
-    * *Ref: [Database Infrastructure](https://deepwiki.com/DivorcedLance/dm-work/2-database-infrastructure)*
-3.  **ETL & Preprocesamiento:**
-    * Limpieza de datos crudos y manejo de valores nulos.
-    * Transformación de timestamps a variables categóricas para análisis temporal.
-    * Ingeniería de características (Feature Engineering) para los modelos predictivos.
-4.  **Modelado Predictivo:**
-    * Entrenamiento de modelos de regresión para estimar afluencia por distrito y día.
-    * Pipeline de re-entrenamiento automatizado.
-    * *Ref: [Model Development](https://deepwiki.com/DivorcedLance/dm-work/3-model-development)*
+El objetivo es demostrar cómo transformar datos crudos de validación (QR) en decisiones estratégicas sobre rutas y flotas.
 
 ---
 
-## 📊 Módulos de Visualización y BI
+## 🏗️ Arquitectura del Flujo de Datos (Pipeline)
 
-El sistema cuenta con un frontend analítico que consume los datos procesados, actuando como una herramienta de Business Intelligence personalizada.
+El sistema sigue un flujo ELT/ETL estricto documentado en nuestra wiki:
 
-### 1. Métricas Clave (KPIs)
-Visualización del estado actual de la organización, desglosando usuarios por roles y estado de actividad.
-![Métricas](screenshots/image-2.png)
+1.  **Fuente de Datos (Data Entry):** Registro de validaciones de usuarios mediante escaneo QR (Interfaz Operativa).
+2.  **Motor de Procesamiento (Python):**
+    * **Extracción:** Script que consulta los nuevos registros de la base de datos transaccional.
+    * **Transformación (ETL):** Limpieza de datos, manejo de nulos y estructuración temporal.
+    * **Predicción (ML):** Aplicación de modelos de regresión (`scikit-learn`) para estimar la demanda futura por distrito y día.
+    * **Carga:** Inserción de los datos procesados y predicciones en tablas analíticas (Data Mart).
+3.  **Capa de Visualización (Power BI):**
+    * Conexión directa a la base de datos analítica.
+    * Modelado de datos (relaciones y medidas DAX).
+    * Visualización interactiva para stakeholders.
 
-### 2. Predicción de Demanda (Machine Learning)
-El sistema utiliza datos históricos para proyectar la carga de pasajeros.
-* **Por Distrito:** Identificación de zonas críticas (ej. San Juan de Lurigancho) para optimizar rutas.
-* **Por Día de la Semana:** Análisis de tendencias semanales para la gestión de horarios.
+---
 
-| Distribución Geográfica | Tendencia Semanal |
+## 📊 Dashboards en Power BI
+
+### 1. Tablero de Control Gerencial (Overview)
+Vista principal diseñada para la toma de decisiones rápida. Muestra KPIs consolidados y tendencias de crecimiento mensual procesadas por el script de Python.
+![Dashboard Corporativo](assets/image.png)
+
+### 2. Análisis de Métricas y Segmentación
+Desglose detallado de la base de usuarios. Permite filtrar por roles (Pasajeros, Conductores) y estado de actividad, facilitando la auditoría del sistema.
+![Métricas](assets/image-2.png)
+
+### 3. Modelado Predictivo (Machine Learning Integration)
+Aquí se visualiza el valor agregado del script de Python. Power BI grafica los resultados del modelo predictivo almacenados en la DB.
+
+* **Predicción Geoespacial:** Estimación de demanda por distritos (ej. San Juan de Lurigancho) para planificación de nuevas rutas.
+* **Predicción Temporal:** Proyección de afluencia por día de la semana para optimizar la frecuencia de buses.
+
+| Distribución por Distrito (Predicción) | Tendencia Semanal (Predicción) |
 |:---:|:---:|
-| ![Predicción Distritos](screenshots/image-3.png) | ![Predicción Semana](screenshots/image-4.png) |
+| ![Predicción Distritos](assets/image-3.png) | ![Predicción Semana](assets/image-4.png) |
 
-### 3. Validación Operativa
-Interfaz móvil para la captura de datos en campo mediante escaneo QR, punto de entrada para el pipeline de datos.
-<img src="screenshots/image-1.png" width="300">
+---
+
+## 📱 Origen de los Datos (Validación)
+Interfaz de operación utilizada para el registro y validación de usuarios. Estos datos crudos son el insumo principal (`input`) que el script de Python procesa posteriormente.
+<img src="assets/image-1.png" width="300">
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-### Data Engineering & Backend
-* **Lenguaje:** Python (Pandas, NumPy).
-* **Machine Learning:** Scikit-learn (Modelos de Regresión y Clasificación).
-* **Persistencia de Modelos:** Joblib/Pickle para serialización.
-* **API:** RESTful API para servir predicciones y datos al frontend.
+### Data Engineering & Scripting
+* **Python:** Lenguaje núcleo para la orquestación del pipeline.
+* **Pandas/NumPy:** Manipulación y limpieza de dataframes.
+* **Scikit-learn:** Entrenamiento y ejecución de modelos predictivos (Regresión).
+* **SQL Connector:** Inyección de datos procesados a la base de datos.
 
-### Visualización & Frontend
-* **Framework:** React / Next.js (Dashboard interactivo).
-* **Gráficos:** Recharts / Chart.js para visualización de datos.
-
-### Infraestructura (DevOps)
-* **Contenedores:** Docker & Docker Compose para orquestación de servicios.
-* **Entorno:** Configuración aislada para reproducibilidad.
-* *Ref: [Development Environment](https://deepwiki.com/DivorcedLance/dm-work/7-development-environment)*
+### Business Intelligence
+* **Microsoft Power BI:** Herramienta de visualización y modelado semántico.
+* **DAX:** Creación de medidas calculadas para KPIs dinámicos.
+* **Data Modeling:** Diseño de esquema estrella/copo de nieve para optimizar el rendimiento de los reportes.
 
 ---
 
-## 🚀 Instalación y Despliegue
+## ⚙️ Cómo ejecutar el Pipeline
 
-Este proyecto utiliza Docker para facilitar el despliegue del entorno completo (DB, API, Frontend).
+1.  **Configuración de Base de Datos:**
+    Asegúrese de tener la instancia de base de datos activa y las credenciales en el archivo `.env`.
 
-1.  **Clonar el repositorio:**
+2.  **Ejecución del Script ETL/ML:**
+    El script procesa los datos históricos y genera las predicciones:
     ```bash
-    git clone [https://github.com/DivorcedLance/transport-data-etl.git](https://github.com/DivorcedLance/transport-data-etl.git)
-    cd transport-data-etl
+    pip install -r requirements.txt
+    python etl_prediction_engine.py
     ```
+    *Este proceso limpia los datos nuevos y actualiza las tablas de hechos en la DB.*
 
-2.  **Configurar variables de entorno:**
-    Renombrar `.env.example` a `.env` y configurar las credenciales de base de datos.
-
-3.  **Ejecutar con Docker Compose:**
-    ```bash
-    docker-compose up --build
-    ```
-
-4.  **Acceso:**
-    * Dashboard: `http://localhost:3000`
-    * API Documentation: `http://localhost:8000/docs`
-
----
-
-## 📈 Impacto de Negocio
-
-La implementación de este sistema permite:
-* **Reducción de incertidumbre:** Predicción de picos de demanda con un margen de error reducido.
-* **Optimización de recursos:** Asignación dinámica de buses basada en la densidad de usuarios por distrito.
-* **Integridad de datos:** Validación digital que elimina el fraude en el acceso al servicio.
+3.  **Actualización de Power BI:**
+    Abrir el archivo `.pbix` y hacer clic en **"Actualizar"**. El dashboard extraerá las nuevas predicciones generadas por Python directamente de la base de datos.
 
 ---
 
 ## 👤 Autor
 
 **José Luis Vergara Pachas**
-* *Ingeniero de Software & Data Engineer*
+* *Data Analyst & BI Developer*
 * [LinkedIn](https://www.linkedin.com/in/jose-luis-vergara-pachas-194914259) | [GitHub](https://github.com/DivorcedLance) | [Email](mailto:divorcedlance@gmail.com)
