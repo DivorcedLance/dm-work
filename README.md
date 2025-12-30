@@ -39,7 +39,7 @@ Visión general de la criminalidad histórica. Incluye **Heatmaps (Mapas de Calo
 ### 2. Validación de Modelos (Backtesting)
 Módulo técnico para evaluar la fiabilidad del sistema. Compara la curva de **Datos Reales vs. Predicción**, demostrando la capacidad del modelo para capturar la estacionalidad semanal.
 * **KPIs de Error:** MAE (1.83) y RMSE (2.60) para transparencia en la precisión.
-![Model Validation](assets/image-1.jpg)
+![Model Validation](assets/image-1.png)
 
 ### 3. Benchmarking de Algoritmos
 Comparativa de rendimiento entre diferentes arquitecturas de ML (LightGBM, Prophet, XGBoost) desglosado por distrito.
@@ -55,7 +55,7 @@ El valor central del proyecto. Tableros que proyectan la demanda de seguridad fu
 
 * **Semanal:** Planificación táctica día por día y hora por hora para la semana entrante.
   
-  ![Weekly Forecast](assets/image-4.jpg)
+  ![Weekly Forecast](assets/image-4.png)
 
 ---
 
