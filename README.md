@@ -17,7 +17,7 @@
 Este repositorio demuestra la integración de ingeniería de software con ciencia de datos, enfocándose en la **toma de decisiones basada en datos**.
 
 ### 📸 Vista General del Dashboard
-![Dashboard Corporativo](assets/image.png)
+![Dashboard Corporativo](screenshots/image.png)
 *Panel administrativo centralizado con KPIs en tiempo real.*
 
 ---
@@ -47,7 +47,7 @@ El sistema cuenta con un frontend analítico que consume los datos procesados, a
 
 ### 1. Métricas Clave (KPIs)
 Visualización del estado actual de la organización, desglosando usuarios por roles y estado de actividad.
-![Métricas](assets/image-2.png)
+![Métricas](screenshots/image-2.png)
 
 ### 2. Predicción de Demanda (Machine Learning)
 El sistema utiliza datos históricos para proyectar la carga de pasajeros.
@@ -56,11 +56,11 @@ El sistema utiliza datos históricos para proyectar la carga de pasajeros.
 
 | Distribución Geográfica | Tendencia Semanal |
 |:---:|:---:|
-| ![Predicción Distritos](assets/image-3.png) | ![Predicción Semana](assets/image-4.png) |
+| ![Predicción Distritos](screenshots/image-3.png) | ![Predicción Semana](screenshots/image-4.png) |
 
 ### 3. Validación Operativa
 Interfaz móvil para la captura de datos en campo mediante escaneo QR, punto de entrada para el pipeline de datos.
-<img src="assets/image-1.png" width="300">
+<img src="screenshots/image-1.png" width="300">
 
 ---
 
