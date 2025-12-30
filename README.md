@@ -48,12 +48,14 @@ Comparativa de rendimiento entre diferentes arquitecturas de ML (LightGBM, Proph
 
 ### 4. Forecasting Operativo (Predicción Futura)
 El valor central del proyecto. Tableros que proyectan la demanda de seguridad futura.
-* **Mensual:** Identificación de "Distritos Críticos" (ej. SOUTHERN) para asignación de presupuesto mensual.
-* **Semanal:** Planificación táctica día por día y hora por hora para la semana entrante.
 
-| Proyección Mensual | Planificación Semanal |
-|:---:|:---:|
-| ![Monthly Forecast](assets/image-3.png) | ![Weekly Forecast](assets/image-4.jpg) |
+* **Mensual:** Identificación de "Distritos Críticos" (ej. SOUTHERN) para asignación de presupuesto mensual.
+  
+  ![Monthly Forecast](assets/image-3.png)
+
+* **Semanal:** Planificación táctica día por día y hora por hora para la semana entrante.
+  
+  ![Weekly Forecast](assets/image-4.jpg)
 
 ---
 
