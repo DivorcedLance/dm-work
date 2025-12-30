@@ -1,102 +1,111 @@
-# 🚍 TransportAnalytics: Pipeline ETL y Predicción de Demanda en Power BI
+# 🚓 SF Crime Analytics: Pipeline de Predicción y Análisis de Seguridad
 
 [![Power BI](https://img.shields.io/badge/Business_Intelligence-Power_BI-F2C811?logo=powerbi)](https://powerbi.microsoft.com/)
 [![Python](https://img.shields.io/badge/Data_Engineering-Python_3.9-3776AB?logo=python)](https://www.python.org/)
-[![SQL](https://img.shields.io/badge/Database-SQL-4479A1)]()
-[![Machine Learning](https://img.shields.io/badge/Analytics-Scikit--Learn-orange)]()
+[![SQL](https://img.shields.io/badge/Database-SQL_Server-CC2927?logo=microsoft-sql-server)]()
+[![Machine Learning](https://img.shields.io/badge/Models-XGBoost_%7C_Prophet-orange)]()
 
-> **Solución de Inteligencia de Negocios (BI) que integra scripts de Python para ETL y Machine Learning, alimentando un sistema de reportes centralizado en Power BI.**
-
----
-
-## 📋 Resumen del Proyecto
-
-Este proyecto implementa una arquitectura de datos moderna para optimizar la gestión de transporte universitario. A diferencia de los reportes estáticos tradicionales, **TransportAnalytics** utiliza un script de Python automatizado que actúa como motor de cálculo: extrae datos operativos, ejecuta modelos predictivos de demanda y escribe los resultados en una base de datos. Finalmente, **Power BI** se conecta a esta fuente para visualizar métricas históricas y predicciones futuras.
-
-El objetivo es demostrar cómo transformar datos crudos de validación (QR) en decisiones estratégicas sobre rutas y flotas.
+> **Solución integral de Business Intelligence que combina un pipeline ETL en Python y modelos de Machine Learning para predecir la incidencia delictiva y optimizar la asignación de recursos policiales.**
 
 ---
 
-## 🏗️ Arquitectura del Flujo de Datos (Pipeline)
+## 📋 Resumen Ejecutivo
 
-El sistema sigue un flujo ELT/ETL estricto documentado en nuestra wiki:
+Este proyecto aborda el desafío de la asignación eficiente de recursos de seguridad pública en la ciudad de San Francisco. Mediante el análisis de datos históricos y la implementación de modelos predictivos, se desarrolló un sistema que no solo visualiza lo que ocurrió, sino que **pronostica dónde y cuándo ocurrirán futuros incidentes**.
 
-1.  **Fuente de Datos (Data Entry):** Registro de validaciones de usuarios mediante escaneo QR (Interfaz Operativa).
-2.  **Motor de Procesamiento (Python):**
-    * **Extracción:** Script que consulta los nuevos registros de la base de datos transaccional.
-    * **Transformación (ETL):** Limpieza de datos, manejo de nulos y estructuración temporal.
-    * **Predicción (ML):** Aplicación de modelos de regresión (`scikit-learn`) para estimar la demanda futura por distrito y día.
-    * **Carga:** Inserción de los datos procesados y predicciones en tablas analíticas (Data Mart).
-3.  **Capa de Visualización (Power BI):**
-    * Conexión directa a la base de datos analítica.
-    * Modelado de datos (relaciones y medidas DAX).
-    * Visualización interactiva para stakeholders.
+La arquitectura desacopla el procesamiento pesado (realizado en Python) de la capa de presentación (Power BI), permitiendo un análisis fluido sobre millones de registros.
 
 ---
 
-## 📊 Dashboards en Power BI
+## 🏗️ Arquitectura de Datos (End-to-End)
 
-### 1. Tablero de Control Gerencial (Overview)
-Vista principal diseñada para la toma de decisiones rápida. Muestra KPIs consolidados y tendencias de crecimiento mensual procesadas por el script de Python.
-![Dashboard Corporativo](assets/image.png)
+El flujo de datos sigue una arquitectura moderna de Analytics Engineering:
 
-### 2. Análisis de Métricas y Segmentación
-Desglose detallado de la base de usuarios. Permite filtrar por roles (Pasajeros, Conductores) y estado de actividad, facilitando la auditoría del sistema.
-![Métricas](assets/image-2.png)
+1.  **Ingesta & ETL (Python):** Script automatizado que extrae los datos crudos, normaliza fechas y gestiona valores nulos.
+2.  **Machine Learning Engine:**
+    * Entrenamiento de modelos competitivos (**XGBoost, LightGBM, Prophet**).
+    * Generación de predicciones a futuro (Forecasting) a nivel distrito y hora.
+3.  **Data Warehouse (SQL):** Almacenamiento estructurado de hechos históricos y predicciones en un esquema Relacional.
+4.  **Visualización (Power BI):** Conexión a la DB para visualización interactiva y cálculo de medidas DAX complejas.
 
-### 3. Modelado Predictivo (Machine Learning Integration)
-Aquí se visualiza el valor agregado del script de Python. Power BI grafica los resultados del modelo predictivo almacenados en la DB.
+---
 
-* **Predicción Geoespacial:** Estimación de demanda por distritos (ej. San Juan de Lurigancho) para planificación de nuevas rutas.
-* **Predicción Temporal:** Proyección de afluencia por día de la semana para optimizar la frecuencia de buses.
+## 📊 Dashboards y Módulos de Análisis
 
-| Distribución por Distrito (Predicción) | Tendencia Semanal (Predicción) |
+### 1. Análisis Histórico y Patrones Temporales
+Visión general de la criminalidad histórica. Incluye **Heatmaps (Mapas de Calor)** que cruzan *Día de la Semana vs. Hora*, identificando patrones críticos (ej. Viernes 18:00 hrs) para la planificación de patrullaje.
+![Historical Analysis](assets/image.png)
+
+### 2. Validación de Modelos (Backtesting)
+Módulo técnico para evaluar la fiabilidad del sistema. Compara la curva de **Datos Reales vs. Predicción**, demostrando la capacidad del modelo para capturar la estacionalidad semanal.
+* **KPIs de Error:** MAE (1.83) y RMSE (2.60) para transparencia en la precisión.
+![Model Validation](assets/image-1.jpg)
+
+### 3. Benchmarking de Algoritmos
+Comparativa de rendimiento entre diferentes arquitecturas de ML (LightGBM, Prophet, XGBoost) desglosado por distrito.
+* *Insight:* Permite seleccionar el modelo óptimo según la métrica de negocio prioritaria (MAPE vs RMSE).
+![Model Benchmark](assets/image-2.png)
+
+### 4. Forecasting Operativo (Predicción Futura)
+El valor central del proyecto. Tableros que proyectan la demanda de seguridad futura.
+* **Mensual:** Identificación de "Distritos Críticos" (ej. SOUTHERN) para asignación de presupuesto mensual.
+* **Semanal:** Planificación táctica día por día y hora por hora para la semana entrante.
+
+| Proyección Mensual | Planificación Semanal |
 |:---:|:---:|
-| ![Predicción Distritos](assets/image-3.png) | ![Predicción Semana](assets/image-4.png) |
-
----
-
-## 📱 Origen de los Datos (Validación)
-Interfaz de operación utilizada para el registro y validación de usuarios. Estos datos crudos son el insumo principal (`input`) que el script de Python procesa posteriormente.
-<img src="assets/image-1.png" width="300">
+| ![Monthly Forecast](assets/image-3.png) | ![Weekly Forecast](assets/image-4.jpg) |
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-### Data Engineering & Scripting
-* **Python:** Lenguaje núcleo para la orquestación del pipeline.
-* **Pandas/NumPy:** Manipulación y limpieza de dataframes.
-* **Scikit-learn:** Entrenamiento y ejecución de modelos predictivos (Regresión).
-* **SQL Connector:** Inyección de datos procesados a la base de datos.
+### Data Engineering & Data Science
+* **Python (Pandas/NumPy):** Limpieza de datos y Feature Engineering (creación de variables temporales).
+* **Scikit-learn / XGBoost / Prophet:** Entrenamiento de modelos de regresión y series de tiempo.
+* **SQLAlchemy:** ORM para la inyección eficiente de datos procesados a la base de datos.
 
-### Business Intelligence
-* **Microsoft Power BI:** Herramienta de visualización y modelado semántico.
-* **DAX:** Creación de medidas calculadas para KPIs dinámicos.
-* **Data Modeling:** Diseño de esquema estrella/copo de nieve para optimizar el rendimiento de los reportes.
+### Business Intelligence (Power BI)
+* **Data Modeling:** Diseño de esquema Estrella (Star Schema) para optimizar el rendimiento de consultas.
+* **DAX (Data Analysis Expressions):** Medidas calculadas para variaciones porcentuales (`VAR`, `CALCULATE`, `TIME INTELLIGENCE`).
+* **UX/UI:** Diseño de reportes navegables y filtros dinámicos.
 
 ---
 
-## ⚙️ Cómo ejecutar el Pipeline
+## ⚙️ Instalación y Ejecución
 
-1.  **Configuración de Base de Datos:**
-    Asegúrese de tener la instancia de base de datos activa y las credenciales en el archivo `.env`.
+Para replicar este entorno de análisis:
 
-2.  **Ejecución del Script ETL/ML:**
-    El script procesa los datos históricos y genera las predicciones:
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone [https://github.com/DivorcedLance/sf-crime-analytics.git](https://github.com/DivorcedLance/sf-crime-analytics.git)
+    ```
+
+2.  **Configurar Entorno Python:**
     ```bash
     pip install -r requirements.txt
-    python etl_prediction_engine.py
     ```
-    *Este proceso limpia los datos nuevos y actualiza las tablas de hechos en la DB.*
 
-3.  **Actualización de Power BI:**
-    Abrir el archivo `.pbix` y hacer clic en **"Actualizar"**. El dashboard extraerá las nuevas predicciones generadas por Python directamente de la base de datos.
+3.  **Ejecutar Pipeline ETL:**
+    Este script procesa el dataset `csv`, entrena los modelos y puebla la base de datos SQL.
+    ```bash
+    python src/etl_pipeline.py
+    ```
+
+4.  **Visualizar en Power BI:**
+    Abrir el archivo `SFCrime_Dashboard.pbix` y actualizar las credenciales de la base de datos local.
+
+---
+
+## 📈 Impacto del Proyecto
+
+* **Toma de decisiones basada en datos:** Transición de una asignación de policías basada en intuición a una basada en probabilidad de riesgo.
+* **Visibilidad Operativa:** Identificación precisa de las horas pico delictivas, permitiendo turnos rotativos más eficientes.
+* **Escalabilidad:** La arquitectura permite integrar nuevos datos diariamente simplemente re-ejecutando el script ETL.
 
 ---
 
 ## 👤 Autor
 
 **José Luis Vergara Pachas**
-* *Data Analyst & BI Developer*
+* *Data Analyst & BI Engineer*
 * [LinkedIn](https://www.linkedin.com/in/jose-luis-vergara-pachas-194914259) | [GitHub](https://github.com/DivorcedLance) | [Email](mailto:divorcedlance@gmail.com)
