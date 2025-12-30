@@ -1,86 +1,123 @@
-# Eliminar cualquier contenedor existente
-docker compose down -v
+# 🚍 TransportData: Pipeline de Predicción y Análisis de Transporte Urbano
 
-# Iniciar los contenedores en segundo plano
-docker-compose up -d
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
+[![ETL](https://img.shields.io/badge/Pipeline-ETL-green)]()
+[![Machine Learning](https://img.shields.io/badge/ML-Scikit--Learn-orange)]()
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB)](https://reactjs.org/)
+[![Docker](https://img.shields.io/badge/Deploy-Docker-2496ED)](https://www.docker.com/)
 
-# Esperar a que los contenedores estén listos
-En docker revisa que el contenedor init-db y haya terminado, deberá salir algo así:
+> **Sistema integral de Inteligencia de Negocios y Data Engineering para la gestión, validación y predicción de demanda en transporte universitario.**
 
-```
-2025-07-13 14:49:58 Waiting for SQL Server to be ready...
-2025-07-13 14:50:08 Initializing database...
-2025-07-13 14:50:08 Changed database context to 'CrimeData'.
-2025-07-13 14:50:31 
-2025-07-13 14:50:31 (1762311 rows affected)
-2025-07-13 14:50:33 
-2025-07-13 14:50:33 (1762311 rows affected)
-2025-07-13 14:50:34 
-2025-07-13 14:50:34 (4515 rows affected)
-2025-07-13 14:50:34 
-2025-07-13 14:50:34 (24 rows affected)
-2025-07-13 14:50:34 
-2025-07-13 14:50:34 (10 rows affected)
-2025-07-13 14:50:39 
-2025-07-13 14:50:39 (695398 rows affected)
-```
+---
 
-# Instalar python venv
-python -m venv venv
+## 📋 Descripción del Proyecto
 
-# Activar el entorno virtual
-source venv/bin/activate
+**TransportData** es una solución _end-to-end_ diseñada para modernizar la gestión logística del transporte. El proyecto no solo administra la operación diaria (validación de usuarios vía QR), sino que implementa un **Pipeline ETL (Extract, Transform, Load)** robusto que alimenta modelos de Machine Learning para predecir la demanda futura y optimizar la asignación de flotas.
 
-# Instalar las dependencias del proyecto
-pip install -r requirements.txt
+Este repositorio demuestra la integración de ingeniería de software con ciencia de datos, enfocándose en la **toma de decisiones basada en datos**.
 
-# Ejecutar script para predecir y cargar a la base de datos el flujo vehicular
-python predict_and_load_data.py
+### 📸 Vista General del Dashboard
+![Dashboard Corporativo](assets/image.png)
+*Panel administrativo centralizado con KPIs en tiempo real.*
 
-# Abrir el dashboard en Power BI Desktop
+---
 
-# Relaciones
+## 🏗️ Arquitectura de Datos & Pipeline ETL
 
-![Relacions 01](image.png)
-![Relacions 02](image-1.png)
+El núcleo del proyecto se basa en una arquitectura modular documentada en nuestra wiki interna:
 
-# Entendimiento del proyecto
+1.  **Ingesta de Datos (Data Ingestion):** Captura de datos transaccionales en tiempo real (validaciones QR, registros de usuarios).
+2.  **Infraestructura de Base de Datos:**
+    * Modelado relacional optimizado para consultas analíticas.
+    * *Ref: [Database Infrastructure](https://deepwiki.com/DivorcedLance/dm-work/2-database-infrastructure)*
+3.  **ETL & Preprocesamiento:**
+    * Limpieza de datos crudos y manejo de valores nulos.
+    * Transformación de timestamps a variables categóricas para análisis temporal.
+    * Ingeniería de características (Feature Engineering) para los modelos predictivos.
+4.  **Modelado Predictivo:**
+    * Entrenamiento de modelos de regresión para estimar afluencia por distrito y día.
+    * Pipeline de re-entrenamiento automatizado.
+    * *Ref: [Model Development](https://deepwiki.com/DivorcedLance/dm-work/3-model-development)*
 
-Se busca predecir la cantidad de crimenes por distrito, fecha y hora en los distritos policiales de SanFrancisco, con modelos de forecasting como SARIMA y LSTM. El proyecto utiliza un dataset de Kaggle que contiene datos históricos de crímenes en San Francisco, y se centra en la predicción de la cantidad de crímenes por distrito y fecha, en lugar de clasificar el tipo de crimen.
-https://www.kaggle.com/c/sf-crime (originalmente se quería clasificar el tipo de crimen, pero se decidió predecir la cantidad de crímenes por distrito y fecha).
+---
 
-El flujo de trabajo del proyecto es el siguiente:
-1. **Inicialización de la base de datos**: Se utiliza un contenedor Docker para inicializar una base de datos SQL Server con los datos históricos de crímenes.
-2. En el notebook `final.ipynb`, se realiza un análisis de los datos, se crean variables exógenas y se entrenan, evaluan y exportan los modelos de forecasting.
-3. **Predicción y carga de datos**: El script `predict_and_load_data.py` se encarga de predecir la cantidad de crímenes por distrito y fecha utilizando los modelos entrenados en la carpeta `models_to_use`, y cargar los resultados en la base de datos SQL Server.
-4. **Visualización de resultados**: Se utiliza Power BI para visualizar los resultados de las predicciones y el análisis de los datos.
+## 📊 Módulos de Visualización y BI
 
-# Cosas a mejorar si vasa tomar este proyecto
+El sistema cuenta con un frontend analítico que consume los datos procesados, actuando como una herramienta de Business Intelligence personalizada.
 
-- Implementar las clases para implementar los modelos SARIMA y LTSM, las que están en el código probablemente no funcionen.
-- Manejo de predicciones ya existentes en prediction_test y prediction_future. EL script predict_and_load_data.py no maneja las predicciones ya existentes, por lo que si se ejecuta varias veces probablemente se duplicarán los datos.
-- Factorizar funcionalidades como la creación de las variables exógenas entre el notebook y el script predict_and_load_data.py.
-- Implementar la ejecución de predicciones en las clases de los modelos, para que se pueda ejecutar el script predict_and_load_data.py sin tener que modificarlo. Esto para centralizar la lógica de cada modelo y facilitar la implementación de nuevos modelos.
-- Hacer una interfaz de usuario para predict_and_load_data.py y para las funciones de entrenar modelos por distrito, para seleccionar que modelo se quiere ejecutar, y así los inutiles de tus compañeros´al menos puedan ayudarte a entrenar y ejecutar los modelos.
-- Mejorar el dashboard de Power BI, con mapas y visualizaciones más interesantes.
-- El docker compose debería esperar a que init_db termine, luego se podría ejecutar el script predict_and_load_data.py automáticamente.
+### 1. Métricas Clave (KPIs)
+Visualización del estado actual de la organización, desglosando usuarios por roles y estado de actividad.
+![Métricas](assets/image-2.png)
 
-## Errores
+### 2. Predicción de Demanda (Machine Learning)
+El sistema utiliza datos históricos para proyectar la carga de pasajeros.
+* **Por Distrito:** Identificación de zonas críticas (ej. San Juan de Lurigancho) para optimizar rutas.
+* **Por Día de la Semana:** Análisis de tendencias semanales para la gestión de horarios.
 
-- La implementación de los modelos SARIMA y LSTM no está completa, por lo que es probable que no funcionen correctamente.  Esto es tanto en el notebook `final.ipynb` como en el script `predict_and_load_data.py`. Se recomienda implementar las clases correspondientes para cada modelo y ajustar los parámetros según sea necesario.
-- En la dim_fecha los siguientes atributos son mejor calcularlo directamente en PowerBI.
+| Distribución Geográfica | Tendencia Semanal |
+|:---:|:---:|
+| ![Predicción Distritos](assets/image-3.png) | ![Predicción Semana](assets/image-4.png) |
 
-- `month_name`
-- `day_of_week`
-- `week_number`
+### 3. Validación Operativa
+Interfaz móvil para la captura de datos en campo mediante escaneo QR, punto de entrada para el pipeline de datos.
+<img src="assets/image-1.png" width="300">
 
-Esto es dado a que `predict_and_load_data.py` llenan los datos de la tabla dim_fecha cuando no existe la fecha en los datos originales (por ejemplo al predecir el futuro). Si quieres tmb se puede calcular esto en `ensure_dim_date` (`predict_and_load_data.py`), pero por tiempo se hizo directamente en Power BI.
-- El codigo está muy mal estructurado, no se siguió un patrón de diseño claro y las clases no están bien definidas. Se recomienda refactorizar el código para mejorar su legibilidad y mantenibilidad.
+---
 
-## Notas
+## 🛠️ Stack Tecnológico
 
-- Usa la db que se te de la gana, se usó SQL Server porque Microsoft es una perra codiciosa que te obliga a usar su software.
-- Recomiendo *fuertemente* que antes de hacer nada evalues cada uno de los 5 modelos en el distrito SOUTHERN. Si el mejor modelo que obtengas tiene un MAPE lamentable (menos del 30%), entonces preparate para bajar pepita con tu profe. Una opción es en lugar de agrupar los registros por distrito-fecha-hora, solo agrupar por fecha-hora.
-- Además también recomiendo medir cuanto tiempo tardo cada modelo con SOUTHERN, ese es el distrito que más tiempo va a tardar. Si se sigue el flujo de trabajo del proyecto como estaba pensado, tendrás que entrenar 9 veces cada modelo. Eso sin contar el backtesting que cuenta como entrenarlo unas 10 veces.
-- El dataset de Kaggle tiene un tamaño considerable, capaz descartando años muy antiguos se puede reducir el tamaño del dataset y mejorar los tiempos de entrenamiento.
-- Si algún grafico no muestra datos seguramente falte alguna relación, recuerda relacionar todo con `dim_date`.
+### Data Engineering & Backend
+* **Lenguaje:** Python (Pandas, NumPy).
+* **Machine Learning:** Scikit-learn (Modelos de Regresión y Clasificación).
+* **Persistencia de Modelos:** Joblib/Pickle para serialización.
+* **API:** RESTful API para servir predicciones y datos al frontend.
+
+### Visualización & Frontend
+* **Framework:** React / Next.js (Dashboard interactivo).
+* **Gráficos:** Recharts / Chart.js para visualización de datos.
+
+### Infraestructura (DevOps)
+* **Contenedores:** Docker & Docker Compose para orquestación de servicios.
+* **Entorno:** Configuración aislada para reproducibilidad.
+* *Ref: [Development Environment](https://deepwiki.com/DivorcedLance/dm-work/7-development-environment)*
+
+---
+
+## 🚀 Instalación y Despliegue
+
+Este proyecto utiliza Docker para facilitar el despliegue del entorno completo (DB, API, Frontend).
+
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone [https://github.com/DivorcedLance/transport-data-etl.git](https://github.com/DivorcedLance/transport-data-etl.git)
+    cd transport-data-etl
+    ```
+
+2.  **Configurar variables de entorno:**
+    Renombrar `.env.example` a `.env` y configurar las credenciales de base de datos.
+
+3.  **Ejecutar con Docker Compose:**
+    ```bash
+    docker-compose up --build
+    ```
+
+4.  **Acceso:**
+    * Dashboard: `http://localhost:3000`
+    * API Documentation: `http://localhost:8000/docs`
+
+---
+
+## 📈 Impacto de Negocio
+
+La implementación de este sistema permite:
+* **Reducción de incertidumbre:** Predicción de picos de demanda con un margen de error reducido.
+* **Optimización de recursos:** Asignación dinámica de buses basada en la densidad de usuarios por distrito.
+* **Integridad de datos:** Validación digital que elimina el fraude en el acceso al servicio.
+
+---
+
+## 👤 Autor
+
+**José Luis Vergara Pachas**
+* *Ingeniero de Software & Data Engineer*
+* [LinkedIn](https://www.linkedin.com/in/jose-luis-vergara-pachas-194914259) | [GitHub](https://github.com/DivorcedLance) | [Email](mailto:divorcedlance@gmail.com)
